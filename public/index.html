@@ -352,11 +352,15 @@
 
     resultadoTitulares.innerHTML = data.equipo_titular
       .map(
-        (j, i) => `// recibe dos parámetros: j (el jugador) e i (la posición, empezando en 0).
+        (j, i) => `
         <div class="titular">
-          <span><span class="num">${i + 1}.</span>${j.jugador}</span> // muestra el nombre del jugador y su posición en la lista
-          <span class="nota">${j.puntuacion}</span> // muestra la puntuación del jugador
+          <span><span class="num">${i + 1}.</span>${j.jugador}</span>
+          <span class="nota">${j.puntuacion}</span> 
         </div>`
+
+        // ( j, i) recibe dos parámetros: j (el jugador) e i (la posición, empezando en 0).
+         // muestra el nombre del jugador y su posición en la lista
+        // muestra la puntuación del jugador
       )
       .join(""); // une todos los elementos en un solo string y lo pone en el div resultadoTitulares
   });
