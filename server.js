@@ -38,32 +38,33 @@ app.post("/api/entrenamiento", async (req, res) => {
   try {
     const { jugador_id, numero_entrenamiento, potencia_tiro, velocidad, pases_efectivos } = req.body;
 
-    // Validacion de datos
-    // valida que no falte ningún dato 
+    // Validación simple de los datos que llegan
     if (!jugador_id || !numero_entrenamiento || potencia_tiro == null || velocidad == null || pases_efectivos == null) {
       return res.status(400).json({ mensaje: "Faltan datos del entrenamiento." });
     }
-    // pide que el numero sea 1 2 o 3, si es otro devuelve error
     if (![1, 2, 3].includes(Number(numero_entrenamiento))) {
       return res.status(400).json({ mensaje: "El numero_entrenamiento debe ser 1, 2 o 3." });
     }
-    
-    // se calcula el resultado gracias a la funcion (calcularResultado) con la formula que dio Maiki
+
     const resultado = calcularResultado(Number(potencia_tiro), Number(velocidad), Number(pases_efectivos));
 
-    // Guardamos o actualizamos si ese jugador ya tenía ese entrenamiento registrado
+    // Guardamos el entrenamiento en la base de datos
     await pool.query(
       `INSERT INTO entrenamientos (jugador_id, numero_entrenamiento, potencia_tiro, velocidad, pases_efectivos, resultado)
-       VALUES (?, ?, ?, ?, ?, ?)`
+       VALUES (?, ?, ?, ?, ?, ?)`,
       [jugador_id, numero_entrenamiento, potencia_tiro, velocidad, pases_efectivos, resultado]
     );
-    
-    //esto es lo que la página recibe de vuelta
+
     res.json({
       mensaje: "Entrenamiento guardado correctamente.",
       resultado_calculado: resultado,
     });
   } catch (error) {
+    if (error.code === "ER_DUP_ENTRY") {
+      return res.status(400).json({
+        mensaje: "Ese jugador ya tiene registrado ese número de entrenamiento.",
+      });
+    }
     console.error(error);
     res.status(500).json({ mensaje: "Error guardando el entrenamiento.", error: error.message });
   }
