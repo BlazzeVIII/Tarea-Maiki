@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Futbol 5 - Equipo Titular</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style> 
+  :root {
+    --verde-cancha: #1F5C3F;
+    --verde-oscuro: #123825;
+    --crema: #F6F4EC;
+    --carbon: #1C2420;
+    --amarillo: #E8B93A;
+    --gris: #6B7570;
+    --borde: #DAD5C4;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    color: var(--carbon);
+    background: var(--verde-cancha);
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.035) 0px,
+        rgba(255,255,255,0.035) 60px,
+        transparent 60px,
+        transparent 120px
+      );
+    min-height: 100vh;
+    padding: 32px 16px 64px;
+  }
+
+  .cancha-header {
+    max-width: 980px;
+    margin: 0 auto 28px;
+    text-align: center;
+    color: var(--crema);
+  }
+
+  .cancha-header .circulo {
+    width: 54px;
+    height: 54px;
+    border: 3px solid var(--amarillo);
+    border-radius: 50%;
+    margin: 0 auto 14px;
+  }
+
+  .cancha-header h1 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 2.1rem;
+    margin: 0 0 6px;
+  }
+
+  .cancha-header p {
+    margin: 0;
+    color: #cfe3d5;
+    font-size: 0.95rem;
+  }
+
+  .contenedor {
+    max-width: 980px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .contenedor { grid-template-columns: 1fr; }
+  }
+
+  .tarjeta {
+    background: var(--crema);
+    border-radius: 14px;
+    padding: 26px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  }
+
+  .tarjeta h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    margin: 0 0 4px;
+    color: var(--verde-oscuro);
+  }
+
+  .tarjeta .subt {
+    font-size: 0.85rem;
+    color: var(--gris);
+    margin: 0 0 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin: 14px 0 6px;
+    color: var(--verde-oscuro);
+  }
+
+  select, input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--borde);
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: #fff;
+  }
+
+  select:focus, input:focus {
+    outline: 2px solid var(--verde-cancha);
+    outline-offset: 1px;
+  }
+
+  button {
+    margin-top: 22px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--verde-cancha);
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  button:hover { background: var(--verde-oscuro); }
+
+  button.amarillo {
+    background: var(--amarillo);
+    color: var(--verde-oscuro);
+  }
+  button.amarillo:hover { background: #d1a52e; }
+
+  .mensaje {
+    margin-top: 14px;
+    font-size: 0.88rem;
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: none;
+  }
+  .mensaje.ok { background: #DCEEE1; color: #1F5C3F; display: block; }
+  .mensaje.error { background: #F6DCDC; color: #8A2B2B; display: block; }
+
+  .lista-estado {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .lista-estado li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--borde);
+    font-size: 0.9rem;
+  }
+  .lista-estado li:last-child { border-bottom: none; }
+
+  .pastilla {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: #E4E0D0;
+    color: var(--gris);
+  }
+  .pastilla.completo { background: #DCEEE1; color: #1F5C3F; }
+
+  .titular {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 14px;
+    background: #fff;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border-left: 4px solid var(--amarillo);
+  }
+  .titular .num {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    color: var(--verde-cancha);
+    margin-right: 10px;
+  }
+  .titular .nota {
+    font-weight: 700;
+    color: var(--verde-oscuro);
+  }
+
+  .vacio {
+    text-align: center;
+    color: var(--gris);
+    font-size: 0.88rem;
+    padding: 18px 0;
+  }
+</style>
+</head>
+<body>
+
+  <div class="cancha-header">
+    <div class="circulo"></div>
+    <h1>Futbol 5 - Equipo Titular</h1>
+    <p>Registra los entrenamientos de la semana y consulta quiénes juegan el partido</p>
+  </div>
+
+  <div class="contenedor">
+
+    <!-- Formulario para registrar un entrenamiento -->
+    <div class="tarjeta">
+      <h2>1. Registrar entrenamiento</h2>
+      <p class="subt">Se hacen 3 entrenamientos por semana, por cada jugador.</p>
+
+      <form id="form-entrenamiento">
+        <label for="jugador">Jugador</label>
+        <select id="jugador" required></select>
+
+        <label for="numero">Número de entrenamiento</label>
+        <select id="numero" required>
+          <option value="1">Entrenamiento 1</option>
+          <option value="2">Entrenamiento 2</option>
+          <option value="3">Entrenamiento 3</option>
+        </select>
+
+        <label for="potencia">Potencia de tiro (Km/h)</label>
+        <input type="number" id="potencia" step="0.1" min="0" required />
+
+        <label for="velocidad">Velocidad (Km/h)</label>
+        <input type="number" id="velocidad" step="0.1" min="0" required />
+
+        <label for="pases">Pases efectivos (cantidad)</label>
+        <input type="number" id="pases" min="0" required />
+
+        <button type="submit">Guardar entrenamiento</button>
+        <div id="mensaje-form" class="mensaje"></div>
+      </form>
+    </div>
+
+    <!-- Aqui veo el estado de los entrenamientos -->
+    <div class="tarjeta">
+      <h2>2. Estado de la semana</h2>
+      <p class="subt">Cuántos entrenamientos lleva cada jugador (de 3).</p>
+      <ul class="lista-estado" id="lista-estado">
+        <li class="vacio">Cargando...</li>
+      </ul>
+
+      <button class="amarillo" id="btn-titulares" style="margin-top:22px;">Ver equipo titular</button>
+      <div id="mensaje-titulares" class="mensaje"></div>
+      <div id="resultado-titulares" style="margin-top:14px;"></div>
+    </div>
+
+  </div>
+
+<script>
+  // esto me permite cambiar la url del api 
+  const API = "http://localhost:3000/api";
+
+  const selectJugador = document.getElementById("jugador"); //busca el elemento que tenga id="jugador" y lo guarda en una variable, para poder leerlo o modificarlo despues
+  const listaEstado = document.getElementById("lista-estado");
+  const form = document.getElementById("form-entrenamiento");
+  const mensajeForm = document.getElementById("mensaje-form");
+  const btnTitulares = document.getElementById("btn-titulares");
+  const mensajeTitulares = document.getElementById("mensaje-titulares");
+  const resultadoTitulares = document.getElementById("resultado-titulares");
+
+  //llenamos el select de jugadores y el estado
+  async function cargarJugadores() {
+    const res = await fetch(`${API}/jugadores`); //le pide al servidor la lista de jugadores
+    const jugadores = await res.json(); //convierte la respuesta en un objeto de javascript
+    selectJugador.innerHTML = jugadores 
+      .map((j) => `<option value="${j.id}">${j.nombre}</option>`) // por cada jugador agrega una opcion al select
+      .join(""); 
+  }
+
+  async function cargarEstado() { 
+    const res = await fetch(`${API}/estado`); // le pide al servidor la lista de jugadores con su estado de entrenamientos
+    const filas = await res.json(); // el await espera a que la respuesta llegue y la convierte en un objeto.
+    listaEstado.innerHTML = filas
+      .map((f) => {
+        const completo = f.entrenamientos_registrados >= 3; 
+        return `
+          <li>
+            <span>${f.nombre}</span>
+            <span class="pastilla ${completo ? "completo" : ""}">${f.entrenamientos_registrados}/3</span> // si el jugador tiene 3 entrenamientos registrados le pone la clase completo, sino no le pone nada. Y el #completo ?" es como un if, si es true pone completo, sino pone "".
+          </li>`;
+      })
+      .join("");
+  }
+
+  cargarJugadores();
+  cargarEstado();
+
+  // Guardar un entrenamiento
+  form.addEventListener("submit", async (e) => { // cuando el formulario se envia ejecuta una funcion.
+    e.preventDefault(); // evita que la pagina se recargue al enviar el formulario
+    mensajeForm.className = "mensaje";
+
+    const body = {
+      jugador_id: Number(selectJugador.value),
+      numero_entrenamiento: Number(document.getElementById("numero").value),
+      potencia_tiro: Number(document.getElementById("potencia").value),
+      velocidad: Number(document.getElementById("velocidad").value),
+      pases_efectivos: Number(document.getElementById("pases").value),
+    };
+
+    try {
+      const res = await fetch(`${API}/entrenamiento`, {
+        method: "POST", // aqui envio datos a mi base de datos
+        headers: { "Content-Type": "application/json" }, // aviso al servidar que envie json ("Jason" es un formato de datos que se usa mucho en la web. Significa JavaScript Object Notation y sirve como un obejto con varias propiedades y valores).)
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.mensaje || "Error al guardar");
+      
+      // si todo sale bien, muestra un mensaje de exito y resetea el formulario
+      mensajeForm.textContent = `${data.mensaje} Nota obtenida: ${data.resultado_calculado}`;
+      mensajeForm.className = "mensaje ok";
+      form.reset();
+      cargarEstado();
+    } catch (err) {
+      mensajeForm.textContent = err.message;
+      mensajeForm.className = "mensaje error";
+    }
+  });
+
+  // Ver el equipo titular
+  btnTitulares.addEventListener("click", async () => { //si le undo aqui, me pide la api de titulares y me devuelve un json con los jugadores titulares y su puntuacion.
+    mensajeTitulares.className = "mensaje";
+    resultadoTitulares.innerHTML = "";
+    
+    // le pide al servidor la lista de jugadores titulares y su puntuacion
+    const res = await fetch(`${API}/titulares`); 
+    const data = await res.json();
+
+    if (data.mensaje) { // si el servidor me devuelve un mensaje de error, lo muestro en pantalla
+      mensajeTitulares.textContent = data.mensaje;
+      mensajeTitulares.className = "mensaje error";
+      return;
+    }
+
+    resultadoTitulares.innerHTML = data.equipo_titular
+      .map(
+        (j, i) => `// recibe dos parámetros: j (el jugador) e i (la posición, empezando en 0).
+        <div class="titular">
+          <span><span class="num">${i + 1}.</span>${j.jugador}</span> // muestra el nombre del jugador y su posición en la lista
+          <span class="nota">${j.puntuacion}</span> // muestra la puntuación del jugador
+        </div>`
+      )
+      .join(""); // une todos los elementos en un solo string y lo pone en el div resultadoTitulares
+  });
+</script>
+
+</body>
+</html>
