@@ -75,11 +75,11 @@ app.post("/api/entrenamiento", async (req, res) => {
 
 app.get("/api/titulares", async (req, res) => {
   try {
-    //cuantos jugadores hay en total
+    // Cuántos jugadores hay en total
     const [jugadores] = await pool.query("SELECT id, nombre FROM jugadores");
     const totalJugadores = jugadores.length;
 
-    //cuantos entrenamientos tiene cada jugador
+    // Cuántos entrenamientos tiene cada jugador
     const [conteo] = await pool.query(
       `SELECT jugador_id, COUNT(*) AS cantidad
        FROM entrenamientos
@@ -89,19 +89,19 @@ app.get("/api/titulares", async (req, res) => {
     const jugadoresConTres = conteo.filter((j) => j.cantidad === 3).length;
 
     if (jugadoresConTres < totalJugadores) {
-      return res.json({ // jugador no tiene los 3 entrenamientos completos
+      return res.json({
         mensaje: "No hay suficiente información. Todavía faltan entrenamientos por registrar.",
       });
     }
 
-    //si todos completaron los 3 entrenamiento caluclo el promedio de cada jugador
+    // Si todos completaron los 3 entrenamientos, calculamos el promedio de cada jugador
     const [promedios] = await pool.query(
       `SELECT j.id, j.nombre, AVG(e.resultado) AS promedio
        FROM jugadores j
-       JOIN entrenamientos e ON e.jugador_id = j.id // JOIN es para unir las tablas jugadores y entrenamientos
+       JOIN entrenamientos e ON e.jugador_id = j.id
        GROUP BY j.id, j.nombre
-       ORDER BY promedio DESC // ordena de mayor a menor promedio
-       LIMIT 5` // el limite son 5 porque solo 5 jugadores titulan
+       ORDER BY promedio DESC
+       LIMIT 5`
     );
 
     const titulares = promedios.map((j) => ({
