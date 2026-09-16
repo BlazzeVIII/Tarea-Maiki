@@ -291,8 +291,9 @@
         return `
           <li>
             <span>${f.nombre}</span>
-            <span class="pastilla ${completo ? "completo" : ""}">${f.entrenamientos_registrados}/3</span> // si el jugador tiene 3 entrenamientos registrados le pone la clase completo, sino no le pone nada. Y el #completo ?" es como un if, si es true pone completo, sino pone "".
+            <span class="pastilla ${completo ? "completo" : ""}">${f.entrenamientos_registrados}/3</span> 
           </li>`;
+        // si el jugador tiene 3 entrenamientos registrados le pone la clase completo, sino no le pone nada. Y el #completo ?" es como un if, si es true pone completo, sino pone "".
       })
       .join("");
   }
